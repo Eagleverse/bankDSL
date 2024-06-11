@@ -6,14 +6,6 @@ import string
 #####     MAIN :)             #####
 ###################################
 
-def main():
-    print("Hello Bank!")
-
-
-# END
-if __name__ == "__main__":
-    main()
-
 
 class Bank:
     def __init__(self):
@@ -63,7 +55,3 @@ class Account:
 
     def current_balance(self):
         return self.balance
-
-
-def run(param, text):
-    return None
