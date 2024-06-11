@@ -1,4 +1,3 @@
-
 import random
 import string
 
@@ -47,10 +46,10 @@ class Account:
         suffix = ''.join(random.choices(string.digits, k=6))
         return prefix + suffix
 
-    def transact(self, type, amount):
-        if type == 'deposit':
+    def transact(self, type_, amount):
+        if type_ == 'deposit':
             self.balance += amount
-        elif type == 'withdrawal':
+        elif type_ == 'withdrawal':
             if self.balance >= amount:
                 self.balance -= amount
             else:
@@ -64,3 +63,7 @@ class Account:
 
     def current_balance(self):
         return self.balance
+
+
+def run(param, text):
+    return None
