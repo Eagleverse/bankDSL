@@ -1,15 +1,27 @@
-from apparatus import lexer
+import banking_dsl
+from apparatus import lexer, parser
 
 
 def main():
-    while True:
-        text = input('main > ')
-        result, error = lexer.run('<stdin>', text)
+    text = ""
+    while text.strip() != "exit()":
+        text = input('hi > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit()":
+            break
 
-        if error:
-            print(error.as_string())
-        else:
-            print(result)
+        result, error = banking_dsl.run('<stdin>', text)
+
+
+#
+#       if error:
+#          print(error.as_string())
+#     elif result:
+#        if len(result.elements) == 1:
+#           print(repr(result.elements[0]))
+#      else:
+#         print(repr(result))
 
 
 if __name__ == "__main__":

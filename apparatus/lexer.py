@@ -105,7 +105,7 @@ class Lexer:
     def make_tokens(self):
         tokens = []
 
-        while self.current_char is not None:
+        while self.current_char != None:
             if self.current_char in ' \t':
                 self.advance()
             elif self.current_char in DIGITS:
@@ -134,10 +134,9 @@ class Lexer:
         dot_count = 0
         pos_start = self.pos.copy()
 
-        while self.current_char is not None and self.current_char in DIGITS + '.':
+        while self.current_char != None and self.current_char in DIGITS + '.':
             if self.current_char == '.':
-                if dot_count == 1:
-                    break
+                if dot_count == 1: break
                 dot_count += 1
                 num_str += '.'
             else:
@@ -150,15 +149,15 @@ class Lexer:
             return Token(TT_FLOAT, float(num_str), pos_start, self.pos)
 
     def make_string(self):
-        string_ = ''
+        string = ''
         pos_start = self.pos.copy()
         self.advance()
 
         while self.current_char is not None and (self.current_char != '"'):
-            string_ += self.current_char
+            string += self.current_char
             self.advance()
 
-        return Token(TT_STRING, str(string_), pos_start, self.pos)
+        return Token(TT_STRING, str(string), pos_start, self.pos)
 
 
 #######################################

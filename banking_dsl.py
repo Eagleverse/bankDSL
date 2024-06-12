@@ -1,6 +1,10 @@
 import random
 import string
 
+from apparatus import *
+from apparatus.lexer import *
+from apparatus.parser import *
+
 
 ###################################
 #####     MAIN :)             #####
@@ -55,3 +59,20 @@ class Account:
 
     def current_balance(self):
         return self.balance
+
+
+#######################################
+# RUN
+#######################################
+
+
+# Generate AST
+# parser_ = Parser(tokens)
+#   ast = parser_.parse()
+#  if ast.error: return None, ast.error
+
+def run(fn, text):
+    lexer = Lexer(fn, text)
+    tokens, error = lexer.make_tokens()
+
+    return tokens, error
