@@ -1,5 +1,5 @@
 import unittest
-from banking_dsl import Bank, Customer, Account
+from banking import Bank, Customer, Account
 
 
 class TestBankingDSL(unittest.TestCase):

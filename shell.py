@@ -1,4 +1,4 @@
-import banking_dsl
+import banking
 from apparatus import lexer, parser
 
 
@@ -11,7 +11,7 @@ def main():
         if text.strip() == "exit()":
             break
 
-        result, error = banking_dsl.run('<stdin>', text)
+        result, error = banking.run('<stdin>', text)
 
 
 #
