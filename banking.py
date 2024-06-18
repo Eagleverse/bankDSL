@@ -85,8 +85,10 @@ def main():
             break
 
         result, error = run('<stdin>', text)
-        print(result,error)
-
+        if error:
+            print(error.as_string())
+        else:
+            print(result)
 #
 #       if error:
 #          print(error.as_string())

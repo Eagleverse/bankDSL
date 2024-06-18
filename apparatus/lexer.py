@@ -86,7 +86,8 @@ class Token:
             self.pos_end = pos_end.copy()
 
     def __repr__(self):
-        if self.value: return f'{self.type}:{self.value}'
+        if self.value:
+            return f'{self.type}:{self.value}'
         return f'{self.type}'
 
 
@@ -109,7 +110,7 @@ class Lexer:
     def make_tokens(self):
         tokens = []
 
-        while self.current_char != None:
+        while self.current_char is not None:
             if self.current_char in ' \t':
                 self.advance()
             elif self.current_char in DIGITS:
@@ -150,9 +151,10 @@ class Lexer:
         dot_count = 0
         pos_start = self.pos.copy()
 
-        while self.current_char != None and self.current_char in DIGITS + '.':
+        while self.current_char is not None and self.current_char in DIGITS + '.':
             if self.current_char == '.':
-                if dot_count == 1: break
+                if dot_count == 1:
+                    break
                 dot_count += 1
                 num_str += '.'
             else:
@@ -169,7 +171,7 @@ class Lexer:
         pos_start = self.pos.copy()
         self.advance()
 
-        while self.current_char != None and (self.current_char != '"'):
+        while self.current_char is not None and (self.current_char != '"'):
             string += self.current_char
             self.advance()
 
@@ -179,27 +181,8 @@ class Lexer:
 #######################################
 # RUN
 #######################################
-
-
 def run(fn, text):
     lexer = Lexer(fn, text)
     tokens, error = lexer.make_tokens()
 
     return tokens, error
-
-
-# run lex standalone
-def main():
-    text = ""
-    while text.strip() != "exit()":
-        text = input('lexer > ')
-        if text.strip() == "":
-            continue
-        if text.strip() == "exit()":
-            break
-
-        result, error = run('<stdin>', text)
-        print(result)
-
-
-# main()
