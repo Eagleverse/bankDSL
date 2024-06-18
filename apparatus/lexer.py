@@ -1,36 +1,6 @@
-import string
-def string_with_arrows(text, pos_start, pos_end):
-    result = ''
+from string_with_arrows import *
 
-    # Calculate indices
-    idx_start = max(text.rfind('\n', 0, pos_start.idx), 0)
-    idx_end = text.find('\n', idx_start + 1)
-    if idx_end < 0:
-        idx_end = len(text)
 
-    # Generate each line
-    line_count = pos_end.ln - pos_start.ln + 1
-    for i in range(line_count):
-        # Calculate line columns
-        line = text[idx_start:idx_end]
-        col_start = pos_start.col if i == 0 else 0
-        col_end = pos_end.col if i == line_count - 1 else len(line) - 1
-
-        # Append to result
-        result += line + '\n'
-        result += ' ' * col_start + '^' * (col_end - col_start)
-
-        # Re-calculate indices
-        idx_start = idx_end
-        idx_end = text.find('\n', idx_start + 1)
-        if idx_end < 0:
-            idx_end = len(text)
-
-    return result.replace('\t', '')
-
-#######################################
-# ERROR
-#######################################
 class Error:
     def __init__(self, pos_start, pos_end, error_name, details):
         self.pos_start = pos_start
@@ -90,6 +60,7 @@ class RTError(Error):
 
 DIGITS = "0123456789"
 LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 
 #######################################
 # POSITION
@@ -175,7 +146,7 @@ class Lexer:
     def make_tokens(self):
         tokens = []
 
-        while self.current_char != None:
+        while self.current_char is not None:
             if self.current_char in " \t":
                 self.advance()
             elif self.current_char in DIGITS:
@@ -207,7 +178,7 @@ class Lexer:
                 pos_start = self.pos.copy()
                 char = self.current_char
                 self.advance()
-                return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
+                return [], error.IllegalCharError(pos_start, self.pos, "'" + char + "'")
 
         return tokens, None
 
@@ -216,7 +187,7 @@ class Lexer:
         dot_count = 0
         pos_start = self.pos.copy()
 
-        while self.current_char != None and self.current_char in DIGITS + ".":
+        while self.current_char is not None and self.current_char in DIGITS + ".":
             if self.current_char == ".":
                 if dot_count == 1:
                     break
@@ -236,7 +207,7 @@ class Lexer:
         pos_start = self.pos.copy()
         self.advance()
 
-        while self.current_char != None and (self.current_char != '"'):
+        while self.current_char is not None and (self.current_char != '"'):
             string += self.current_char
             self.advance()
 

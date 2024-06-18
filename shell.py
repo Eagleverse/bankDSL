@@ -1,5 +1,5 @@
 import banking
-from apparatus import lexer, parser
+from apparatus import string_with_arrows
 
 
 def main():
