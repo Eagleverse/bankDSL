@@ -180,8 +180,26 @@ class Lexer:
 # RUN
 #######################################
 
+
 def run(fn, text):
     lexer = Lexer(fn, text)
     tokens, error = lexer.make_tokens()
 
     return tokens, error
+
+
+# run lex standalone
+def main():
+    text = ""
+    while text.strip() != "exit()":
+        text = input('lexer > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit()":
+            break
+
+        result, error = run('<stdin>', text)
+        print(result)
+
+
+# main()

@@ -73,3 +73,29 @@ def run(fn, text):
     tokens, error = lexer.make_tokens()
 
     return tokens, error
+
+
+def main():
+    text = ""
+    while text.strip() != "exit()":
+        text = input('BankS > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit()":
+            break
+
+        result, error = run('<stdin>', text)
+        print(result)
+
+#
+#       if error:
+#          print(error.as_string())
+#     elif result:
+#        if len(result.elements) == 1:
+#           print(repr(result.elements[0]))
+#      else:
+#         print(repr(result))
+
+
+if __name__ == "__main__":
+    main()
