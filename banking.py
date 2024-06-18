@@ -1,9 +1,6 @@
 import random
 import string
-
-from apparatus import *
-from apparatus.lexer import *
-from apparatus.parser import *
+from apparatus.lexer import Lexer
 
 
 ###################################
