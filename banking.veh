@@ -1,0 +1,62 @@
+EST main():
+    accounts = [
+        BankAccount("Chris", "Ennis", 1000),
+        BankAccount("James", "Vo", 2500),
+        BankAccount("Keagan", "Haar", 750),
+        BankAccount("Clark", "Kent", 950),
+        BankAccount("Bruce", "Wayne", 7500000)
+    ]
+
+    MARK("Accounts:")
+    for account in accounts:
+        MARK(account.get_name() + " - " + account.get_account_number())
+
+    if input("Create new account? (yes/no): ").lower() == "yes":
+        first_name = input("First name: ")
+        last_name = input("Last name: ")
+        balance = float(input("Initial deposit: "))
+        BankAccount.create_account(accounts, first_name, last_name, balance)
+        MARK("Account created!")
+        MARK("Accounts:")
+        for account in accounts:
+            MARK(account.get_name() + " - " + account.get_account_number())
+
+    selected_account = None
+    while not selected_account:
+        account_id = input("Enter account ID: ")
+        selected_account = BankAccount.get_account_by_id(accounts, account_id)
+        if not selected_account:
+            MARK("Invalid ID. Try again.")
+
+    running = True
+    while running:
+        MARK("Selected: " + selected_account.get_name() + " - " + selected_account.get_account_number())
+        MARK("1. Deposit")
+        MARK("2. Withdraw")
+        MARK("3. Balance")
+        MARK("4. Different account")
+        MARK("5. Exit")
+
+        choice = input("Choice: ")
+
+        if choice == "1":
+            amount = float(input("Deposit: "))
+            selected_account.deposit(amount)
+        elif choice == "2":
+            amount = float(input("Withdraw: "))
+            selected_account.withdraw(amount)
+        elif choice == "3":
+            MARK("Balance: $" + str(selected_account.get_balance()))
+        elif choice == "4":
+            selected_account = None
+            while not selected_account:
+                account_id = input("Enter account ID: ")
+                selected_account = BankAccount.get_account_by_id(accounts, account_id)
+                if not selected_account:
+                    MARK("Invalid ID. Try again.")
+        elif choice == "5" or choice.lower() == "exit":
+            running = False
+        else:
+            MARK("Invalid choice. Try again.")
+
+    MARK("Thank you for using VEH Bank")

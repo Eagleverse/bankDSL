@@ -1,61 +1,11 @@
 import random
-import string
 from apparatus.lexer import Lexer
+from commands import *
 
 
 ###################################
 #####     MAIN :)             #####
 ###################################
-
-
-class Bank:
-    def __init__(self):
-        self.customers = []
-
-    def add_customer(self, customer):
-        self.customers.append(customer)
-
-
-class Customer:
-    def __init__(self, first_name, last_name):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.accounts = []
-
-    def open_account(self, account):
-        self.accounts.append(account)
-
-
-class Account:
-    def __init__(self, owner):
-        self.owner = owner
-        self.name = f"{owner.first_name} {owner.last_name}"
-        self.account_number = self.generate_account_number(owner.first_name, owner.last_name)
-        self.balance = 0.0
-        self.transactions = 0
-
-    def generate_account_number(self, first_name, last_name):
-        prefix = first_name[0].upper() + last_name[0].upper()
-        suffix = ''.join(random.choices(string.digits, k=6))
-        return prefix + suffix
-
-    def transact(self, type_, amount):
-        if type_ == 'deposit':
-            self.balance += amount
-        elif type_ == 'withdrawal':
-            if self.balance >= amount:
-                self.balance -= amount
-            else:
-                raise ValueError("Insufficient funds")
-        else:
-            raise ValueError("Unknown transaction type")
-        self.transactions += 1
-
-    def transaction_count(self):
-        return self.transactions
-
-    def current_balance(self):
-        return self.balance
 
 
 #######################################
@@ -68,35 +18,134 @@ class Account:
 #   ast = parser_.parse()
 #  if ast.error: return None, ast.error
 
+
+class BankAccount:
+    def __init__(self, firstname, lastname, initialbal):
+        self.firstName = firstname
+        self.lastName = lastname
+        self.balance = initialbal
+        self.id = Octogram()
+
+    def get_name(self):
+        return f"{self.lastName}, {self.firstName}"
+
+    def get_account_number(self):
+        return self.id
+
+    def get_balance(self):
+        return str(self.balance)
+
+    def deposit(self, deposit_):
+        self.balance += deposit_
+
+    def withdraw(self, withdraw_):
+        # Hypothetical withdrawal.
+        hyposbalance = self.balance
+        hyposbalance2 = hyposbalance - withdraw_
+        if hyposbalance2 >= 0:
+            self.balance -= withdraw_
+        else:
+            mark(f"Overdraw error. Cannot take {withdraw_} from {self.balance}.")
+
+
+def Octogram():
+    rand_list = ""
+    for i in range(0, 7):
+        n = random.randint(0, 9)
+        rand_list += str(n)
+    return rand_list
+
+
+class BankSys:
+    def __init__(self):
+        self.accounts = [
+            BankAccount("Chris", "Ennis", 1000),
+            BankAccount("James", "Vo", 2500),
+            BankAccount("Keagan", "Haar", 750),
+            BankAccount("Clark", "Kent", 950),
+            BankAccount("Bruce", "Wayne", 7500000),
+        ]
+
+    def account_dump(self):
+        return self.accounts
+
+    def get_account_by_id(self, account_id):
+        for i in self.accounts:
+            if i.get_account_number() == account_id:
+                return i
+
+    def create_account(self, first_name, last_name, balance):
+        self.accounts.append(BankAccount(first_name, last_name, balance))
+        mark("Account created!")
+
+
+def main():
+    mark("Accounts:")
+    bank = BankSys()
+    for account in bank.account_dump():
+        mark(f"{account.get_name()}-{account.get_account_number()}")
+
+    if input("Create new account? (yes/no): ").lower() == "yes":
+        first_name = input("First name: ")
+        last_name = input("Last name: ")
+        balance = float(input("Initial deposit: "))
+        bank.create_account(first_name, last_name, balance)
+        mark("Accounts:")
+        for account in bank.account_dump():
+            mark(f"{account.get_name()}-{account.get_account_number()}")
+
+    selected_account = None
+    while not selected_account:
+        account_id = input("Enter account ID: ")
+        selected_account = bank.get_account_by_id(account_id)
+        if not selected_account:
+            mark("Invalid ID. Try again.")
+
+    running = True
+    while running:
+        mark(
+            "Selected: "
+            + selected_account.get_name()
+            + " - "
+            + str(selected_account.get_account_number())
+        )
+        mark("1. Deposit")
+        mark("2. Withdraw")
+        mark("3. Balance")
+        mark("4. Different account")
+        mark("5. Exit")
+
+        choice = input("Choice: ")
+
+        if choice == "1":
+            amount = float(input("Deposit: "))
+            selected_account.deposit(amount)
+        elif choice == "2":
+            amount = float(input("Withdraw: "))
+            selected_account.withdraw(amount)
+        elif choice == "3":
+            mark(f"Balance: ${selected_account.get_balance()}")
+        elif choice == "4":
+            selected_account = None
+            while not selected_account:
+                account_id = input("Enter account ID: ")
+                selected_account = bank.get_account_by_id(account_id)
+                if not selected_account:
+                    mark("Invalid ID. Try again.")
+        elif choice == "5" or choice.lower() == "exit":
+            running = False
+        else:
+            mark("Invalid choice. Try again.")
+
+
+mark("Thank you for using VEH Bank")
+
+
 def run(fn, text):
     lexer = Lexer(fn, text)
     tokens, error = lexer.make_tokens()
 
     return tokens, error
-
-
-def main():
-    text = ""
-    while text.strip() != "exit()":
-        text = input('BankS > ')
-        if text.strip() == "":
-            continue
-        if text.strip() == "exit()":
-            break
-
-        result, error = run('<stdin>', text)
-        if error:
-            print(error.as_string())
-        else:
-            print(result)
-#
-#       if error:
-#          print(error.as_string())
-#     elif result:
-#        if len(result.elements) == 1:
-#           print(repr(result.elements[0]))
-#      else:
-#         print(repr(result))
 
 
 if __name__ == "__main__":
