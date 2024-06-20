@@ -5,7 +5,7 @@ import unittest
 class SpecificationTest(unittest.TestCase):
     def setUp(self):
         self.test_account = BankAccount("Bruce", "Wayne", 500)
-        self.testBank = BankSys()
+        #  self.testBank = BankSys()
         self.accounts = []
 
     def tearDown(self):

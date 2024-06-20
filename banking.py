@@ -112,7 +112,8 @@ class Lexer:
 
         while self.current_char is not None and (self.current_char in DIGITS or self.current_char == '.'):
             if self.current_char == '.':
-                if dot_count == 1: break
+                if dot_count == 1:
+                    break
                 dot_count += 1
             num_str += self.current_char
             self.advance()
@@ -137,10 +138,12 @@ class Lexer:
 
 class ParseResult:
     def __init__(self):
+        self.node = None
         self.error = None
 
     def register(self, res):
-        if res.error: self.error = res.error
+        if res.error:
+            self.error = res.error
         return res
 
     def success(self, node):
@@ -183,7 +186,8 @@ class Interpreter:
         print("Running Interpreter")
         method_name = f'visit_{type(node).__name__}'
         method = getattr(self, method_name, self.no_visit_method)
-        return method(node)
+        return method()
+        # return method(node) Throws "Unexpected argument"
 
     def no_visit_method(self, node):
         raise Exception(f'No visit_{type(node).__name__} method defined')
@@ -193,7 +197,7 @@ class Interpreter:
 
 
 ###################################
-#####   BANKACCOUNT CLASS     #####
+#####   BANK-ACCOUNT CLASS    #####
 ###################################
 
 class BankAccount:
