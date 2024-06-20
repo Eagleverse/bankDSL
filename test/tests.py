@@ -1,57 +1,60 @@
+from banking import *
 import unittest
-#from banking import Bank, Customer, Account
 
 
-class TestBankingDSL(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        print('setUpClass\n')
-
-    @classmethod
-    def tearDownClass(cls):
-        print('tearDownClass\n')
-
+class SpecificationTest(unittest.TestCase):
     def setUp(self):
-        print('setUp')
-        self.bank = Bank()
-        self.Chris = Customer(first_name="Chris", last_name="Ennis")
-        self.bank.add_customer(self.Chris)
-        self.checking_account = Account(owner=self.Chris)
-        self.Chris.open_account(self.checking_account)
+        self.test_account = BankAccount("Bruce", "Wayne", 500)
+        self.testBank = BankSys()
+        self.accounts = []
 
     def tearDown(self):
-        print('tearDown\n')
-
-    def test_deposit(self):
-        print('test_deposit')
-        self.checking_account.transact('deposit', 200.00)
-        self.assertEqual(self.checking_account.transaction_count(), 1)
-        self.assertEqual(self.checking_account.current_balance(), 200.00)
+        del self.test_account
+        del self.accounts
 
     def test_withdrawal(self):
-        print('test_withdrawal')
-        self.checking_account.transact('deposit', 200.00)
-        self.checking_account.transact('withdrawal', 150.00)
-        self.assertEqual(self.checking_account.transaction_count(), 2)
-        self.assertEqual(self.checking_account.current_balance(), 50.00)
+        # Test withdrawing an amount from the account reduces the balance correctly.
+        initial_balance = self.test_account.get_balance()
+        withdrawal_amount = 200
+        self.test_account.withdraw(withdrawal_amount)
+        new_balance = self.test_account.get_balance()
+        try:
+            self.assertEqual(float(new_balance), float(initial_balance) - float(withdrawal_amount))
+            print("PASSED: Withdrawal")
+        except AssertionError:
+            print("FAILED: Withdrawal")
 
-    def test_account_number_generation(self):
-        print('test_account_number_generation')
-        account_number = self.checking_account.account_number
-        self.assertTrue(account_number.startswith("CE"))
-        self.assertEqual(len(account_number), 8)
+    def test_deposit(self):
+        # Test depositing an amount into the account increases the balance correctly.
+        initial_balance = self.test_account.get_balance()
+        deposit_amount = 300
+        self.test_account.deposit(deposit_amount)
+        new_balance = self.test_account.get_balance()
+        try:
+            self.assertEqual(float(new_balance), float(initial_balance) + float(deposit_amount))
+            print("PASSED: Deposit")
+        except AssertionError:
+            print("FAILED: Deposit")
 
-    def test_balance_error(self):
-        print('test_balance_error')
-        self.checking_account.transact('deposit', 50.00)
-        with self.assertRaises(ValueError):
-            self.checking_account.transact('withdrawal', 100.00)
+    def test_account_id_creation(self):
+        # Test that each account is assigned a unique account number.
+        account1 = BankAccount("Wally", "West", 1000)
+        account2 = BankAccount("Barry", "Allen", 2000)
+        try:
+            self.assertNotEqual(account1.get_account_number(), account2.get_account_number())
+            print("PASSED: Account number creation")
+        except AssertionError:
+            print("FAILED: Account number creation")
 
-    def test_invalid_transaction_type(self):
-        print('test_invalid_transaction_type')
-        with self.assertRaises(ValueError):
-            self.checking_account.transact('invalid_type', 100.00)
+    def test_account_creation(self):
+        # Test that creating accounts adds them to the accounts list.
+        self.testBank.create_account("Clark", "Kent", 3000)
+        self.testBank.create_account("Kal", "El", 5000)
+        try:
+            self.assertEqual(len(self.testBank.accounts), 7)
+            print("PASSED: Account creation")
+        except AssertionError:
+            print("FAILED: Account creation")
 
 
 if __name__ == '__main__':

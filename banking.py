@@ -1,12 +1,10 @@
 import random
 from apparatus.lexer import Lexer
-from commands import *
-
-
 ###################################
 #####     MAIN :)             #####
 ###################################
 
+EST = print
 
 #######################################
 # RUN
@@ -45,7 +43,7 @@ class BankAccount:
         if hyposbalance2 >= 0:
             self.balance -= withdraw_
         else:
-            mark(f"Overdraw error. Cannot take {withdraw_} from {self.balance}.")
+            print(f"Overdraw error. Cannot take {withdraw_} from {self.balance}.")
 
 
 def Octogram():
@@ -76,44 +74,44 @@ class BankSys:
 
     def create_account(self, first_name, last_name, balance):
         self.accounts.append(BankAccount(first_name, last_name, balance))
-        mark("Account created!")
+        print("Account created!")
 
 
 def main():
-    mark("Accounts:")
+    print("Accounts:")
     bank = BankSys()
     for account in bank.account_dump():
-        mark(f"{account.get_name()}-{account.get_account_number()}")
+        print(f"{account.get_name()}-{account.get_account_number()}")
 
     if input("Create new account? (yes/no): ").lower() == "yes":
         first_name = input("First name: ")
         last_name = input("Last name: ")
         balance = float(input("Initial deposit: "))
         bank.create_account(first_name, last_name, balance)
-        mark("Accounts:")
+        print("Accounts:")
         for account in bank.account_dump():
-            mark(f"{account.get_name()}-{account.get_account_number()}")
+            print(f"{account.get_name()}-{account.get_account_number()}")
 
     selected_account = None
     while not selected_account:
         account_id = input("Enter account ID: ")
         selected_account = bank.get_account_by_id(account_id)
         if not selected_account:
-            mark("Invalid ID. Try again.")
+            print("Invalid ID. Try again.")
 
     running = True
     while running:
-        mark(
+        print(
             "Selected: "
             + selected_account.get_name()
             + " - "
             + str(selected_account.get_account_number())
         )
-        mark("1. Deposit")
-        mark("2. Withdraw")
-        mark("3. Balance")
-        mark("4. Different account")
-        mark("5. Exit")
+        print("1. Deposit")
+        print("2. Withdraw")
+        print("3. Balance")
+        print("4. Different account")
+        print("5. Exit")
 
         choice = input("Choice: ")
 
@@ -124,21 +122,23 @@ def main():
             amount = float(input("Withdraw: "))
             selected_account.withdraw(amount)
         elif choice == "3":
-            mark(f"Balance: ${selected_account.get_balance()}")
+            print(f"Balance: ${selected_account.get_balance()}")
         elif choice == "4":
             selected_account = None
+            for account in bank.account_dump():
+                print(f"{account.get_name()}-{account.get_account_number()}")
             while not selected_account:
                 account_id = input("Enter account ID: ")
                 selected_account = bank.get_account_by_id(account_id)
                 if not selected_account:
-                    mark("Invalid ID. Try again.")
+                    print("Invalid ID. Try again.")
         elif choice == "5" or choice.lower() == "exit":
             running = False
         else:
-            mark("Invalid choice. Try again.")
+            print("Invalid choice. Try again.")
 
 
-mark("Thank you for using VEH Bank")
+print("Thank you for using VEH Bank")
 
 
 def run(fn, text):
