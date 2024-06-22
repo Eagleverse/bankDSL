@@ -30,13 +30,14 @@ class OverDrawException(BankError):
 ###################################
 #####         POSITION        #####
 ###################################
-
+# Initialization of position, reading user inputs
 class Position:
     def __init__(self, idx, ln, col):
         self.idx = idx
         self.ln = ln
         self.col = col
 
+    # Advance method position
     def advance(self, current_char=None):
         self.idx += 1
         self.col += 1
@@ -51,7 +52,7 @@ class Position:
 ###################################
 #####         TOKENS          #####
 ###################################
-
+# Create Tokens (Token Type)
 TT_INT = 'INT'
 TT_FLOAT = 'FLOAT'
 TT_ID = 'ID'
@@ -61,6 +62,7 @@ TT_PLUS = 'PLUS'
 TT_MINUS = 'MINUS'
 TT_EOF = 'EOF'
 
+# Define Keywords
 KEYWORDS = [
     'def', 'MARK', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE'
 ]
@@ -70,12 +72,14 @@ KEYWORDS = [
 #####         LEXER           #####
 ###################################
 
+# Initialize Tokens
 class Token:
     def __init__(self, type_, value):
         self.type = type_
         self.value = value
 
 
+# Initialize Lexer
 class Lexer:
     def __init__(self, text):
         print("Running Lexer")
@@ -83,35 +87,45 @@ class Lexer:
         self.pos = Position(0, 0, 0)
         self.current_char = self.text[self.pos.idx]
 
+    # Define advance, a method we use to move on to the next character
     def advance(self):
         self.pos.advance(self.current_char)
         self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
 
+    # Generate our tokens in regard to what characters represent them
     def generate_tokens(self):
         tokens = []
 
         while self.current_char is not None:
+            # Ignore tab and space
             if self.current_char in ' \t':
                 self.advance()
+            # Identify DIGITS constant
             elif self.current_char in DIGITS:
                 tokens.append(self.generate_number())
+            # Identify LETTERS constant
             elif self.current_char in LETTERS:
                 tokens.append(self.generate_identifier())
+            # equals
             elif self.current_char == '=':
                 tokens.append(Token(TT_EQ, self.current_char))
                 self.advance()
+            # plus
             elif self.current_char == '+':
                 tokens.append(Token(TT_PLUS, self.current_char))
                 self.advance()
+            # minus
             elif self.current_char == '-':
                 tokens.append(Token(TT_MINUS, self.current_char))
                 self.advance()
+            # Else, advance
             else:
                 self.advance()
-
+        # End of File, return tokens
         tokens.append(Token(TT_EOF, None))
         return tokens
 
+    # Generate numbers, finding int if dot_count is 0 and float if dot_count is 1
     def generate_number(self):
         num_str = ''
         dot_count = 0
@@ -123,12 +137,13 @@ class Lexer:
                 dot_count += 1
             num_str += self.current_char
             self.advance()
-
+        # Return tokens
         if dot_count == 0:
             return Token(TT_INT, int(num_str))
         else:
             return Token(TT_FLOAT, float(num_str))
 
+    # Generate identifiers which are either matching a keyword or an ID
     def generate_identifier(self):
         id_str = ''
         while self.current_char is not None and (self.current_char in LETTERS or self.current_char in DIGITS):
