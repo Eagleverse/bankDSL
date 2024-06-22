@@ -17,13 +17,13 @@ class BankError(Exception):
 
 class InvalidAccountIDError(BankError):
     def __init__(self, account_id):
-        self.message = f"Invalid account ID: {account_id}"
+        self.message = f"Sorry! I  couldn't find: {account_id}.\nPlease Double-check and try again."
         super().__init__(self.message)
 
 
 class OverDrawException(BankError):
-    def __init__(self, account_id):
-        self.message = f"Invalid account ID: {account_id}"
+    def __init__(self, account_id, balanceIN, withdrawal):
+        self.message = f"Overdraw exception for {account_id}. Cannot take {withdrawal} from {balanceIN}."
         super().__init__(self.message)
 
 
