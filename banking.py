@@ -249,11 +249,18 @@ class BankAccount:
         self.balance += amount
 
     def withdraw(self, amount):
-        if amount <= 0:
-            raise ValueError("Withdrawal amount must be positive")
-        if amount > self.balance:
-            raise ValueError("Insufficient balance")
-        self.balance -= amount
+        subtract = 0
+        try:
+            if amount <= 0:
+                raise ValueError("Withdrawal amount must be positive")
+            elif amount > self.balance:
+                raise ValueError("Withdrawal amount must be less than or equal to balance")
+            else:
+                subtract = amount
+        except ValueError as V:
+            print(f"{type(V)}: {V}\nAttempted withdrawal of {amount} from {self.balance}")
+        finally:
+            self.balance -= subtract
 
     @staticmethod
     def create_account(accounts, first_name, last_name, balance):
