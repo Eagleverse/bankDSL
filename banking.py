@@ -244,9 +244,16 @@ class BankAccount:
         return self.balance
 
     def deposit(self, amount):
-        if amount <= 0:
-            raise ValueError("Deposit amount must be positive")
-        self.balance += amount
+        add = 0
+        try:
+            if amount <= 0:
+                raise ValueError("Withdrawal amount must be positive")
+            else:
+                add = amount
+        except ValueError as V:
+            print(f"{type(V)}: {V}\nAttempted withdrawal of {amount} from {self.balance}")
+        finally:
+            self.balance += add
 
     def withdraw(self, amount):
         subtract = 0
