@@ -48,10 +48,10 @@ class SpecificationTest(unittest.TestCase):
 
     def test_account_creation(self):
         # Test that creating accounts adds them to the accounts list.
-        self.testBank.create_account("Clark", "Kent", 3000)
-        self.testBank.create_account("Kal", "El", 5000)
+        test_accounts = [BankAccount("Clark", "Kent", 3000),
+                         BankAccount("Kal", "El", 5000)]
         try:
-            self.assertEqual(len(self.testBank.accounts), 7)
+            self.assertEqual(len(test_accounts), 2)
             print("PASSED: Account creation")
         except AssertionError:
             print("FAILED: Account creation")

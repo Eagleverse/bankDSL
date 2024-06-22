@@ -10,7 +10,7 @@ MARK = print
 ###################################
 #####          ERRORS         #####
 ###################################
-
+'''
 class BankError(Exception):
     pass
 
@@ -25,6 +25,7 @@ class OverDrawException(BankError):
     def __init__(self, account_id, balanceIN, withdrawal):
         self.message = f"Overdraw exception for {account_id}. Cannot take {withdrawal} from {balanceIN}."
         super().__init__(self.message)
+'''
 
 
 ###################################
@@ -247,11 +248,11 @@ class BankAccount:
         add = 0
         try:
             if amount <= 0:
-                raise ValueError("Withdrawal amount must be positive")
+                raise ValueError("Deposit amount must be positive")
             else:
                 add = amount
         except ValueError as V:
-            print(f"{type(V)}: {V}\nAttempted withdrawal of {amount} from {self.balance}")
+            print(f"{type(V)}: {V}\nAttempted deposit of {amount} to {self.balance}")
         finally:
             self.balance += add
 
