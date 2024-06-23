@@ -6,7 +6,6 @@ DIGITS = '0123456789'
 LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 MARK = print
 
-
 ###################################
 #####          ERRORS         #####
 ###################################
@@ -207,6 +206,7 @@ class Interpreter:
     def visit(self, node):
         print("Running Interpreter")
         method_name = f'visit_{type(node).__name__}'
+        print(method_name)
         method = getattr(self, method_name, self.no_visit_method)
         return method(node)
 
@@ -214,7 +214,7 @@ class Interpreter:
         raise Exception(f'No visit_{type(node).__name__} method defined')
 
     def visit_MockNode(self, node):
-        return "Interpreted Mock Node"  # Simplified for demonstration purposes
+        return node
 
 
 ###################################
@@ -360,6 +360,29 @@ def main():
     MARK("Thank you for using VEH Bank")
 
 
+def run(text):
+    lexer = Lexer(text)
+    tokens = lexer.generate_tokens()
+    parser = Parser(tokens)
+    ast = parser.parse()
+    interpreter = Interpreter()
+    result = interpreter.visit(ast.node)
+    return result
+
+
+def mane():
+    text = ""
+    while text.strip() != "exit()":
+        text = input('BankS > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit()":
+            break
+        result = run(text)
+        print(result)
+
+
 # Execute the main function
 if __name__ == "__main__":
-    main()
+    # main()
+    mane()
