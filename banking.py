@@ -64,7 +64,7 @@ TT_EOF = 'EOF'
 
 # Define Keywords
 KEYWORDS = [
-    'def', 'MARK', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE'
+    'def', 'MARK', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE','DEPOSIT','WITHDRAWAL'
 ]
 
 
@@ -77,6 +77,10 @@ class Token:
     def __init__(self, type_, value):
         self.type = type_
         self.value = value
+
+    # Token's based off of this.
+    def __repr__(self):
+        return self.type
 
 
 # Initialize Lexer
@@ -105,6 +109,7 @@ class Lexer:
                 tokens.append(self.generate_number())
             # Identify LETTERS constant
             elif self.current_char in LETTERS:
+                print("Letter")
                 tokens.append(self.generate_identifier())
             # equals
             elif self.current_char == '=':
@@ -193,6 +198,10 @@ class Parser:
             self.current_token = self.tokens[self.token_idx]
 
     def parse(self):
+        for tok in self.tokens:
+            print(f"Parsed {type(tok)}")
+            print(tok)
+
         res = ParseResult()
         node = MockNode()  # Replace this with actual parsing logic if needed
         return res.success(node)
@@ -328,6 +337,8 @@ def main():
 
     running = True
     while running:
+        # We're gonna replace these with keyword tokens.
+        # One operator to keep things simple
         MARK("Selected: " + selected_account.get_name() + " - " + selected_account.get_account_number())
         MARK("1. Deposit")
         MARK("2. Withdraw")
@@ -376,8 +387,10 @@ def mane():
         text = input('BankS > ')
         if text.strip() == "":
             continue
-        if text.strip() == "exit()":
+        if text.strip() == "exit":
             break
+        else:
+            text = text.upper()
         result = run(text)
         print(result)
 
