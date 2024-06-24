@@ -384,25 +384,25 @@ def main():
         # One operator to keep things simple
         MARK("Selected: " + selected_account.get_name() + " - " + selected_account.get_account_number())
         MARK("1. Deposit")
-        MARK("2. Withdraw")
+        MARK("2. Withdrawal")
         MARK("3. Balance")
         MARK("4. Different account")
         MARK("5. Exit")
 
         choice = input("Choice: ")
 
-        if choice == "1":
-            amount = float(input("Deposit: "))
+        if run(choice) == "deposit":
+            amount = float(run(input("Deposit: ")))
             selected_account.deposit(amount)
-        elif choice == "2":
-            amount = float(input("Withdraw: "))
+        elif run(choice) == "withdrawal":
+            amount = float(run(input("Withdraw: ")))
             selected_account.withdraw(amount)
         elif choice == "3":
             MARK("Balance: $" + str(selected_account.get_balance()))
         elif choice == "4":
             selected_account = None
             while not selected_account:
-                account_id = input("Enter account ID: ")
+                account_id = run(input("Enter account ID: "))
                 selected_account = BankAccount.get_account_by_id(accounts, account_id)
                 if not selected_account:
                     MARK("Invalid ID. Try again.")
