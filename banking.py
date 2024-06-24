@@ -6,26 +6,6 @@ DIGITS = '0123456789'
 LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 MARK = print
 
-###################################
-#####          ERRORS         #####
-###################################
-'''
-class BankError(Exception):
-    pass
-
-
-class InvalidAccountIDError(BankError):
-    def __init__(self, account_id):
-        self.message = f"Sorry! I  couldn't find: {account_id}.\nPlease Double-check and try again."
-        super().__init__(self.message)
-
-
-class OverDrawException(BankError):
-    def __init__(self, account_id, balanceIN, withdrawal):
-        self.message = f"Overdraw exception for {account_id}. Cannot take {withdrawal} from {balanceIN}."
-        super().__init__(self.message)
-'''
-
 
 ###################################
 #####         POSITION        #####
