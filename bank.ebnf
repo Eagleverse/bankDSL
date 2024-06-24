@@ -1,0 +1,28 @@
+banking_program = { statement } ;
+
+statement = create_account_stmt
+           | deposit_stmt
+           | withdraw_stmt
+           | balance_stmt
+           | account_id_stmt ;
+
+create_account_stmt = "CREATE" "ACCOUNT" name "WITH" amount ;
+deposit_stmt = "DEPOSIT" amount "TO" account_id ;
+withdraw_stmt = "WITHDRAW" amount "FROM" account_id ;
+balance_stmt = "BALANCE" account_id ;
+account_id_stmt = "ACCOUNT" account_id ;
+
+name = first_name last_name ;
+first_name = letter { letter } ;
+last_name = letter { letter } ;
+
+account_id = letter letter digit digit digit digit digit digit ;
+
+amount = digit { digit } ;
+
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" ;
+
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
