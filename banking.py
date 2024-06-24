@@ -64,7 +64,7 @@ TT_EOF = 'EOF'
 
 # Define Keywords
 KEYWORDS = [
-    'def', 'MARK', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE','DEPOSIT','WITHDRAWAL'
+    'def', 'MARK', 'IF', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE', 'DEPOSIT', 'WITHDRAWAL'
 ]
 
 
@@ -79,8 +79,11 @@ class Token:
         self.value = value
 
     # Token's based off of this.
-    def __repr__(self):
+    def getType(self):
         return self.type
+
+    def getVal(self):
+        return self.value
 
 
 # Initialize Lexer
@@ -182,7 +185,26 @@ class ParseResult:
 
 
 class MockNode:
-    pass
+    def __init__(self,value):
+        self.kind = value
+class IntNode:
+    def __init__(self, value):
+        self.kind = value
+
+
+class FloatNode:
+    def __init__(self, value):
+        self.kind = value
+
+
+class KWNode:
+    def __init__(self, value):
+        self.kind = value
+
+
+class IDNode:
+    def __init__(self, value):
+        self.kind = value
 
 
 class Parser:
@@ -198,12 +220,22 @@ class Parser:
             self.current_token = self.tokens[self.token_idx]
 
     def parse(self):
-        for tok in self.tokens:
-            print(f"Parsed {type(tok)}")
-            print(tok)
-
+        if len(self.tokens) < 1:
+            print(f"One input at a time, sorry!\nUsing your first input: {self.tokens[0]}")
+        tok = self.tokens[0]
         res = ParseResult()
-        node = MockNode()  # Replace this with actual parsing logic if needed
+        print(tok.getType())
+        #  node = MockNode()  # Replace this with actual parsing logic if needed
+        if tok.getType() == "KEYWORD":
+            node = KWNode(tok.getVal())
+        elif tok.getType() == "ID":
+            node = IDNode(tok.getVal())
+        elif tok.getType() == "INT":
+            node = IntNode(tok.getVal())
+        elif tok.getType == "FLOAT":
+            node = FloatNode(tok.getVal())
+        else:
+            node = MockNode(tok.getVal())
         return res.success(node)
 
 
@@ -223,6 +255,18 @@ class Interpreter:
         raise Exception(f'No visit_{type(node).__name__} method defined')
 
     def visit_MockNode(self, node):
+        return node
+
+    def visit_KWNode(self, node):
+        return node
+
+    def visit_IDNode(self, node):
+        return node
+
+    def visit_IntNode(self, node):
+        return node
+
+    def visit_float(self, node):
         return node
 
 
@@ -297,6 +341,14 @@ class BankAccount:
 ###################################
 
 def main():
+    # Lexer, Parser, Interpreter demonstration
+    text = "some sample text"
+    lexer = Lexer(text)
+    tokens = lexer.generate_tokens()
+    parser = Parser(tokens)
+    ast = parser.parse()
+    interpreter = Interpreter()
+    #  result = interpreter.visit(ast.node)
     accounts = [
         BankAccount("Chris", "Ennis", 1000),
         BankAccount("James", "Vo", 2500),
@@ -304,7 +356,6 @@ def main():
         BankAccount("Clark", "Kent", 950),
         BankAccount("Bruce", "Wayne", 7500000)
     ]
-
     MARK("Accounts:")
     for account in accounts:
         MARK(account.get_name() + " - " + account.get_account_number())
@@ -319,18 +370,10 @@ def main():
         for account in accounts:
             MARK(account.get_name() + " - " + account.get_account_number())
 
-    # Lexer, Parser, Interpreter demonstration
-    text = "some sample text"
-    lexer = Lexer(text)
-    tokens = lexer.generate_tokens()
-    parser = Parser(tokens)
-    ast = parser.parse()
-    interpreter = Interpreter()
-    result = interpreter.visit(ast.node)
-
     selected_account = None
     while not selected_account:
-        account_id = input("Enter account ID: ")
+        temp = input("Enter account ID: ")
+        account_id = run(temp)
         selected_account = BankAccount.get_account_by_id(accounts, account_id)
         if not selected_account:
             MARK("Invalid ID. Try again.")
@@ -378,7 +421,7 @@ def run(text):
     ast = parser.parse()
     interpreter = Interpreter()
     result = interpreter.visit(ast.node)
-    return result
+    return result.kind
 
 
 def mane():
@@ -392,10 +435,23 @@ def mane():
         else:
             text = text.upper()
         result = run(text)
-        print(result)
+        print(result.kind)
 
 
 # Execute the main function
 if __name__ == "__main__":
-    # main()
-    mane()
+    main()
+
+'''
+    text = ""
+    while text.strip() != "exit()":
+        text = input('BankS > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit":
+            break
+        else:
+            text = text.upper()
+        result = run(text)
+        print(result.kind)
+'''
