@@ -12,6 +12,9 @@ withdraw_stmt = "WITHDRAW" amount "FROM" account_id ;
 balance_stmt = "BALANCE" account_id ;
 account_id_stmt = "ACCOUNT" account_id ;
 
+keyword = "withdrawal" | "deposit" | "balance"
+
+
 name = first_name last_name ;
 first_name = letter { letter } ;
 last_name = letter { letter } ;
