@@ -15,8 +15,10 @@ class SpecificationTest(unittest.TestCase):
     def test_withdrawal(self):
         # Test withdrawing an amount from the account reduces the balance correctly.
         initial_balance = self.test_account.get_balance()
+        print("Can get balance from test account.")
         withdrawal_amount = 200
         self.test_account.withdraw(withdrawal_amount)
+        print("Can withdraw from test account.")
         new_balance = self.test_account.get_balance()
         try:
             self.assertEqual(float(new_balance), float(initial_balance) - float(withdrawal_amount))
@@ -27,8 +29,10 @@ class SpecificationTest(unittest.TestCase):
     def test_deposit(self):
         # Test depositing an amount into the account increases the balance correctly.
         initial_balance = self.test_account.get_balance()
+        print("Can get balance from test account.")
         deposit_amount = 300
         self.test_account.deposit(deposit_amount)
+        print("Can deposit to test account.")
         new_balance = self.test_account.get_balance()
         try:
             self.assertEqual(float(new_balance), float(initial_balance) + float(deposit_amount))
