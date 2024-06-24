@@ -344,3 +344,17 @@ def run(fn, text):
 
 if __name__ == "__main__":
     main()
+
+    def mane():
+    text = ""
+    while text.strip() != "exit()":
+        text = input('BankS > ')
+        if text.strip() == "":
+            continue
+        if text.strip() == "exit":
+            break
+        else:
+            text = text.upper()
+        result = run(text)
+        print(result.kind)
+

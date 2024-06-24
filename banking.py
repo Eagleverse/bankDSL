@@ -1,9 +1,17 @@
+"""
+CSC330 Language Design and Implementation
+James Vo, Chris Ennis, Keagan Haar
+6/23/24
+- - -
+We certify that the code below is our own work
+"""
+
 ###################################
 #####        CONSTANTS        #####
 ###################################
 
-DIGITS = '0123456789'
-LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+DIGITS = '0123456789'  # digit
+LETTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'  # ANY cap or lower -> tokens
 MARK = print
 
 
@@ -165,8 +173,10 @@ class ParseResult:
 
 
 class MockNode:
-    def __init__(self,value):
+    def __init__(self, value):
         self.kind = value
+
+
 class IntNode:
     def __init__(self, value):
         self.kind = value
@@ -263,6 +273,7 @@ class BankAccount:
         self.balance = balance
         self.account_number = self.generate_account_number(first_name, last_name)
         BankAccount.account_number_counter += 1
+        # Make account ID, 1->99999
 
     def generate_account_number(self, first_name, last_name):
         account_number = f"{first_name[0].upper()}{last_name[0].upper()}{self.account_number_counter:06d}"
@@ -321,14 +332,7 @@ class BankAccount:
 ###################################
 
 def main():
-    # Lexer, Parser, Interpreter demonstration
-    text = "some sample text"
-    lexer = Lexer(text)
-    tokens = lexer.generate_tokens()
-    parser = Parser(tokens)
-    ast = parser.parse()
-    interpreter = Interpreter()
-    #  result = interpreter.visit(ast.node)
+    # Accounts are live
     accounts = [
         BankAccount("Chris", "Ennis", 1000),
         BankAccount("James", "Vo", 2500),
@@ -336,10 +340,11 @@ def main():
         BankAccount("Clark", "Kent", 950),
         BankAccount("Bruce", "Wayne", 7500000)
     ]
-    MARK("Accounts:")
+    MARK("Accounts:")  # Print
     for account in accounts:
         MARK(account.get_name() + " - " + account.get_account_number())
 
+    # Make new account?
     if input("Create new account? (yes/no): ").lower() == "yes":
         first_name = input("First name: ")
         last_name = input("Last name: ")
@@ -350,6 +355,7 @@ def main():
         for account in accounts:
             MARK(account.get_name() + " - " + account.get_account_number())
 
+    # Get account by ID
     selected_account = None
     while not selected_account:
         temp = input("Enter account ID: ")
@@ -360,36 +366,37 @@ def main():
 
     running = True
     while running:
+        # Program Loop
         MARK("Selected: " + selected_account.get_name() + " - " + selected_account.get_account_number())
-        MARK("1. Deposit")
-        MARK("2. Withdrawal")
-        MARK("3. Balance")
-        MARK("4. Different account")
-        MARK("5. Exit")
+        MARK("Deposit")
+        MARK("Withdrawal")
+        MARK("1. Balance")
+        MARK("2. Different account")
+        MARK("3. Exit")
 
         choice = input("Choice: ")
 
-        if run(choice) == "deposit":
+        if run(choice) == "Deposit":
             amount = float(run(input("Deposit: ")))
             selected_account.deposit(amount)
-        elif run(choice) == "withdrawal":
+        elif run(choice) == "Withdrawal":
             amount = float(run(input("Withdraw: ")))
             selected_account.withdraw(amount)
-        elif choice == "3":
+        elif choice == "1":
             MARK("Balance: $" + str(selected_account.get_balance()))
-        elif choice == "4":
+        elif choice == "2":
             selected_account = None
             while not selected_account:
                 account_id = run(input("Enter account ID: "))
                 selected_account = BankAccount.get_account_by_id(accounts, account_id)
                 if not selected_account:
                     MARK("Invalid ID. Try again.")
-        elif choice == "5" or choice.lower() == "exit":
+        elif choice == "3" or choice.lower() == "exit":
             running = False
         else:
             MARK("Invalid choice. Try again.")
 
-    MARK("Thank you for using VEH Bank")
+    MARK("Thank you for using V.E.H Brothers Superhero Bank")
 
 
 def run(text):
@@ -402,34 +409,6 @@ def run(text):
     return result.kind
 
 
-def mane():
-    text = ""
-    while text.strip() != "exit()":
-        text = input('BankS > ')
-        if text.strip() == "":
-            continue
-        if text.strip() == "exit":
-            break
-        else:
-            text = text.upper()
-        result = run(text)
-        print(result.kind)
-
-
 # Execute the main function
 if __name__ == "__main__":
     main()
-
-'''
-    text = ""
-    while text.strip() != "exit()":
-        text = input('BankS > ')
-        if text.strip() == "":
-            continue
-        if text.strip() == "exit":
-            break
-        else:
-            text = text.upper()
-        result = run(text)
-        print(result.kind)
-'''

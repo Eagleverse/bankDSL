@@ -1,3 +1,10 @@
+"""
+CSC330 Language Design and Implementation
+James Vo, Chris Ennis, Keagan Haar
+6/23/24
+- - -
+We certify that the code below is our own work
+"""
 from banking import *
 import unittest
 
