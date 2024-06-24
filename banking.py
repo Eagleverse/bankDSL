@@ -380,8 +380,6 @@ def main():
 
     running = True
     while running:
-        # We're gonna replace these with keyword tokens.
-        # One operator to keep things simple
         MARK("Selected: " + selected_account.get_name() + " - " + selected_account.get_account_number())
         MARK("1. Deposit")
         MARK("2. Withdrawal")
